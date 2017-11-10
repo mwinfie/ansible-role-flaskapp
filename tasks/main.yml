@@ -1,0 +1,79 @@
+---
+# tasks file for flaskapp
+
+- name: Add epel-release repository
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install yum package(s)
+  yum:
+    name: "{{ item }}"
+    state: present
+  
+  with_items:
+    - python-pip
+    - python-devel
+    - gcc
+    - nginx
+
+- name: Install latest version of pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Install virtualenv
+  pip:
+    name: virtualenv
+    state: present
+
+- name: Create flaskapp dir
+  file:
+    path: "{{ flaskapp_root_dir }}"
+    state: directory
+
+- name: Create flaskapp virtualenv
+  pip:
+    name: "{{ item }}"
+    virtualenv: "{{ flaskapp_root_dir }}/myflaskprojectenv"
+  with_items:
+    - uwsgi
+    - flask
+
+- name: Install flaskapp
+  copy:
+    src: myflaskapp.py
+    dest: "{{ flaskapp_root_dir }}/myflaskapp.py"
+
+- name: Install wsgi file
+  copy:
+    src: wsgi.py
+    dest: "{{ flaskapp_root_dir }}/wsgi.py"
+
+- name: Install uWSGI config
+  copy:
+    src: myflaskapp.ini
+    dest: "{{ flaskapp_root_dir }}/myflaskapp.ini"
+  notify:
+    - restart uWSGI
+
+- name: Install uWSGI service
+  template:
+    src: myflaskapp.service.j2
+    dest: /etc/systemd/system/myflaskapp.service
+  
+  notify:
+    - reload systemd daemon
+    - restart uWSGI
+
+- name: Start uWSGI service
+  service:
+    name: myflaskapp
+    state: started
+
+- name: Install nginx config
+  template:
+    src: myflaskapp.conf.j2
+    dest: /etc/nginx/conf.d/myflaskapp.conf
+  notify:
+    - restart nginx

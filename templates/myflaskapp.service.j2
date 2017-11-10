@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve myflaskproject
+After=network.target
+
+[Service]
+User=root
+Group=nginx
+WorkingDirectory={{ flaskapp_root_dir }}
+Environment="PATH={{ flaskapp_root_dir }}/myflaskprojectenv/bin"
+ExecStart={{ flaskapp_root_dir }}/myflaskprojectenv/bin/uwsgi --ini myflaskapp.ini
+
+[Install]
+WantedBy=multi-user.target

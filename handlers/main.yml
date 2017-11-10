@@ -1,0 +1,15 @@
+---
+# handlers file for flaskapp
+- name: reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: restart uWSGI
+  service:
+    name: myflaskapp
+    state: restarted
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
