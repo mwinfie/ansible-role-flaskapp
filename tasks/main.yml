@@ -10,7 +10,6 @@
   yum:
     name: "{{ item }}"
     state: present
-  
   with_items:
     - python-pip
     - python-devel
@@ -44,11 +43,15 @@
   copy:
     src: myflaskapp.py
     dest: "{{ flaskapp_root_dir }}/myflaskapp.py"
+  notify:
+    - restart uWSGI
 
 - name: Install wsgi file
   copy:
     src: wsgi.py
     dest: "{{ flaskapp_root_dir }}/wsgi.py"
+  notify:
+    - restart uWSGI
 
 - name: Install uWSGI config
   copy:

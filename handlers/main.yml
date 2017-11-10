@@ -1,5 +1,6 @@
 ---
 # handlers file for flaskapp
+
 - name: reload systemd daemon
   systemd:
     daemon_reload: yes

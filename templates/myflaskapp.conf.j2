@@ -1,6 +1,8 @@
+#	{{ ansible_managed }}
+
 server {
     listen 80;
-    server_name 10.0.15.21;
+    server_name {{ flaskapp_server_name }};
 
     location / {
         include uwsgi_params;
