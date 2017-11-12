@@ -5,9 +5,10 @@
   yum:
     name: epel-release
     state: present
+  when: ansible_distribution == "CentOS"
 
-- name: Install yum package(s)
-  yum:
+- name: Install package(s)
+  package:
     name: "{{ item }}"
     state: present
   with_items:
