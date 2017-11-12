@@ -9,6 +9,7 @@ before_install:
 install:
   # Install Ansible.
   - pip install ansible
+  - ansible-galaxy install ansible-galaxy install git+https://github.com/mwinfie/flaskapp.git,$TRAVIS_BRANCH
 
 script:
   # Check the role/playbook's syntax.
