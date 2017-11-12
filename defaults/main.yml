@@ -2,4 +2,4 @@
 # defaults file for flaskapp
 
 flaskapp_root_dir: /var/www/myflaskapp
-flaskapp_server_name: flaskapp.dev
+flaskapp_server_name: 127.0.0.1
