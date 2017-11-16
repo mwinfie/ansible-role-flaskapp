@@ -58,8 +58,14 @@ script:
 
   # Check that hello-flask is being served by nginx
   - >
-    'docker exec --tty "$(cat ${container_id})" env TERM=xterm curl -v --silent 127.0.0.1 2>&1
-    | grep "Hello World"'
+    docker exec --tty "$(cat ${container_id})" env TERM=xterm curl -v --silent 127.0.0.1 2>&1
+    | grep "Hello World"
+    && (echo 'Curl test: pass' && exit 0)
+    || (echo 'Curl test: fail' && exit 1)
+
+after_success:
+  # Clean up.
+  - 'sudo docker stop "$(cat ${container_id})"'
 
 #notifications:
   # Notify Ansible Galaxy when a role builds successfully.
